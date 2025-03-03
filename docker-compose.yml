@@ -1,5 +1,20 @@
 version: '3.7' # версия описания docker-compose.yml
 services: # описание сервисов, которые развернутся при запуске файла
+
+  pgdb-todoshka:
+    environment:
+      - DB_NAME=todoshka
+      - PGDATA=/var/lib/postgresql/data/todoshka
+      - POSTGRES_PASSWORD=123456
+    image: 'postgres:12.3-alpine'
+    ports:
+      - 5432:5432
+    restart: always
+    volumes:
+      - ./course/pgdb:/docker-entrypoint-initdb.d:ro
+    networks:
+      - todoshka-net
+
   jenkins: # развернётся Jenkins
     image: jenkins/jenkins:lts # образ, который скачается для установки Jenkins
     privileged: true
@@ -8,7 +23,41 @@ services: # описание сервисов, которые развернут
       - 8081:8080 # В контейнере Jenkins развернётся на порте 8080,
         # но на локальной машине этот порт часто занят,
         # поэтому порт 8080 контейнера связывается
-        # с портом 8081 на локальной машине.
+      # с портом 8081 на локальной машине.
       # Получится адрес localhost:8081
     container_name: jenkins # имя контейнера: оно может быть любым
-      # пароль дженкинс a5a3c9c904444aeea8d283ee265aa2fd
+    # пароль дженкинс docker exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword
+    # 73312fe8aac247169bc0f3f20e8bb54f
+    networks:
+      - todoshka-net
+
+  gitlab:
+    image: gitlab/gitlab-ce:latest
+    container_name: gitlab
+    restart: always
+    hostname: 'gitlab.example.com'
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        # Add any other gitlab.rb configuration here, each on its own line
+        external_url 'https://gitlab.example.com'
+    ports:
+      - '80:80'
+      - '443:443'
+      - '22:22'
+    volumes:
+      - '$GITLAB_HOME/config:/etc/gitlab'
+      - '$GITLAB_HOME/logs:/var/log/gitlab'
+      - '$GITLAB_HOME/data:/var/opt/gitlab'
+    shm_size: '256m'
+
+
+    networks:
+      - todoshka-net
+
+
+
+
+
+networks:
+  todoshka-net:
+    driver: bridge
