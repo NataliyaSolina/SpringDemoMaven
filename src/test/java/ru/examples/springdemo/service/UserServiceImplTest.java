@@ -5,13 +5,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import ru.examples.springdemo.model.User;
-import ru.examples.springdemo.repository.UserRepository;
+import ru.examples.springdemo.models.User;
+import ru.examples.springdemo.repositories.UserRepository;
+import ru.examples.springdemo.services.UserServiceImpl;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
