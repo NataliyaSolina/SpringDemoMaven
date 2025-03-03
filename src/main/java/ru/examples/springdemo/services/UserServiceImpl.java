@@ -1,11 +1,11 @@
-package ru.examples.springdemo.service;
+package ru.examples.springdemo.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.examples.springdemo.handler.CustomAuthenticationSuccessHandler;
-import ru.examples.springdemo.model.User;
-import ru.examples.springdemo.repository.UserRepository;
+import ru.examples.springdemo.handlers.CustomAuthenticationSuccessHandler;
+import ru.examples.springdemo.models.User;
+import ru.examples.springdemo.repositories.UserRepository;
 
 @Service
 @RequiredArgsConstructor

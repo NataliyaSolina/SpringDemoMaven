@@ -1,4 +1,4 @@
-package ru.examples.springdemo.service;
+package ru.examples.springdemo.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -6,8 +6,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import ru.examples.springdemo.model.User;
-import ru.examples.springdemo.repository.UserRepository;
+import ru.examples.springdemo.models.User;
+import ru.examples.springdemo.repositories.UserRepository;
 
 import java.util.Collections;
 

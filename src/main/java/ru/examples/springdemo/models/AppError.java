@@ -1,4 +1,4 @@
-package ru.examples.springdemo.model;
+package ru.examples.springdemo.models;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -1,14 +1,14 @@
-package ru.examples.springdemo.service;
+package ru.examples.springdemo.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import ru.examples.springdemo.exeption.ResourceForbiddenException;
-import ru.examples.springdemo.exeption.ResourceInternalServerErrorException;
-import ru.examples.springdemo.exeption.ResourceNotFoundException;
-import ru.examples.springdemo.model.Task;
-import ru.examples.springdemo.model.User;
-import ru.examples.springdemo.repository.TaskRepository;
+import ru.examples.springdemo.exeptions.ResourceForbiddenException;
+import ru.examples.springdemo.exeptions.ResourceInternalServerErrorException;
+import ru.examples.springdemo.exeptions.ResourceNotFoundException;
+import ru.examples.springdemo.models.Task;
+import ru.examples.springdemo.models.User;
+import ru.examples.springdemo.repositories.TaskRepository;
 
 import java.util.List;
 

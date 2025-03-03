@@ -1,4 +1,4 @@
-package ru.examples.springdemo.model;
+package ru.examples.springdemo.models;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;

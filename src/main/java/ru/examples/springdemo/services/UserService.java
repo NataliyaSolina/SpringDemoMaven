@@ -1,6 +1,6 @@
-package ru.examples.springdemo.service;
+package ru.examples.springdemo.services;
 
-import ru.examples.springdemo.model.User;
+import ru.examples.springdemo.models.User;
 
 public interface UserService {
 

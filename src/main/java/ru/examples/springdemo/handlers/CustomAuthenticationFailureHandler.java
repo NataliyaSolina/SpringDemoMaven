@@ -1,4 +1,4 @@
-package ru.examples.springdemo.handler;
+package ru.examples.springdemo.handlers;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

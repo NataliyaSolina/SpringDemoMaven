@@ -1,11 +1,11 @@
-package ru.examples.springdemo.exeption;
+package ru.examples.springdemo.exeptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import ru.examples.springdemo.model.AppError;
+import ru.examples.springdemo.models.AppError;
 
 @ControllerAdvice
 public class GlobalExceptionsHandler {

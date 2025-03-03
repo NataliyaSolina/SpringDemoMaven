@@ -1,4 +1,4 @@
-package ru.examples.springdemo.controller;
+package ru.examples.springdemo.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -9,8 +9,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.examples.springdemo.model.Task;
-import ru.examples.springdemo.service.TaskServiceImpl;
+import ru.examples.springdemo.models.Task;
+import ru.examples.springdemo.services.TaskServiceImpl;
 
 import java.util.List;
 

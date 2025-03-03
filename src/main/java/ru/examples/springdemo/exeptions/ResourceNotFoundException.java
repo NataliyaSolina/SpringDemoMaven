@@ -1,4 +1,4 @@
-package ru.examples.springdemo.exeption;
+package ru.examples.springdemo.exeptions;
 
 public class ResourceNotFoundException extends RuntimeException {
     public ResourceNotFoundException(String message) {

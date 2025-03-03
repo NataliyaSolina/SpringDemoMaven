@@ -1,10 +1,10 @@
-package ru.examples.springdemo.repository;
+package ru.examples.springdemo.repositories;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import ru.examples.springdemo.model.User;
+import ru.examples.springdemo.models.User;
 
 import java.util.Optional;
 
