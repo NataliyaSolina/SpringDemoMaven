@@ -3,6 +3,8 @@ package ru.examples.springdemo.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import ru.examples.springdemo.converters.UserConverter;
+import ru.examples.springdemo.dtos.UserDto;
 import ru.examples.springdemo.handlers.CustomAuthenticationSuccessHandler;
 import ru.examples.springdemo.models.User;
 import ru.examples.springdemo.repositories.UserRepository;
@@ -14,16 +16,28 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthenticationSuccessHandler authenticationSuccessHandler;
+    private final UserConverter userConverter;
 
     @Override
-    public User save(User user) {
+    public UserDto createUser(UserDto userDto) {
+        User user = userConverter.dtoToEntity(userDto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+
+        userRepository.save(user);
+
+        return userConverter.entityToDto(user);
     }
 
     @Override
     public User getCurrentUser() {
+
         return authenticationSuccessHandler.getUser();
+    }
+
+    @Override
+    public UserDto getCurrentUserDto() {
+
+        return userConverter.entityToDto(getCurrentUser());
 
     }
 }
