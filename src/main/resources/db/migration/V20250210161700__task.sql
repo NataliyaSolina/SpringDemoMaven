@@ -10,8 +10,8 @@ CREATE TABLE task
 CREATE INDEX task_date_idx ON task (date);
 CREATE INDEX task_done_idx ON task (done);
 
-insert into task (date, description, user_id)
-values ('2025-02-21', 'Сережке на стрижку', 3),
+INSERT INTO task (date, description, user_id)
+VALUES ('2025-02-21', 'Сережке на стрижку', 3),
        ('2025-02-20', 'Митап по кролику', 2),
        ('2025-02-12', 'Скомпоновать доклад', 2),
        ('2025-02-11', 'Закончить курс', 2);
