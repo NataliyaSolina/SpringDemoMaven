@@ -1,6 +1,7 @@
 package ru.examples.springdemo.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.examples.springdemo.converters.UserConverter;
@@ -39,5 +40,11 @@ public class UserServiceImpl implements UserService {
 
         return userConverter.entityToDto(getCurrentUser());
 
+    }
+
+    @Override
+    public User getUserByLogin(String login) {
+        return userRepository.findUserByLogin(login)
+                .orElseThrow(() -> new UsernameNotFoundException("user not found"));
     }
 }

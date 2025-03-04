@@ -10,4 +10,6 @@ public interface UserService {
     User getCurrentUser();
 
     UserDto getCurrentUserDto();
+
+    User getUserByLogin(String login);
 }

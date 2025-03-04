@@ -3,6 +3,8 @@ package ru.examples.springdemo.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import ru.examples.springdemo.converters.TaskConverter;
+import ru.examples.springdemo.dtos.TaskDto;
 import ru.examples.springdemo.exeptions.ResourceForbiddenException;
 import ru.examples.springdemo.exeptions.ResourceInternalServerErrorException;
 import ru.examples.springdemo.exeptions.ResourceNotFoundException;
@@ -16,13 +18,20 @@ import static java.lang.String.format;
 
 @Service
 @RequiredArgsConstructor
-public class TaskServiceImpl {
+public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository taskRepository;
     private final UserServiceImpl userService;
+    private final TaskConverter taskConverter;
 
-    public Task create(Task task) {
+    @Override
+    public TaskDto createTask(TaskDto taskDto) {
         User user = userService.getCurrentUser();
+        Task task = Task.builder()
+                .date(taskDto.getDate())
+                .description(taskDto.getDescription())
+                .done(taskDto.isDone())
+                .build();
 
         if (user.getLogin().equalsIgnoreCase("admin")) {
             if (task.getUser() == null) {
@@ -33,47 +42,59 @@ public class TaskServiceImpl {
         }
 
         try {
-            return taskRepository.save(task);
+            taskRepository.save(task);
+            return taskConverter.entityToDto(task);
         } catch (Exception e) {
             throw new ResourceInternalServerErrorException("Не получилось создать");
         }
     }
 
-    public List<Task> getAllByUser() {
+    @Override
+    public List<TaskDto> getAllByUser() {
         User user = userService.getCurrentUser();
-
-        return (List<Task>) (user.getLogin().equalsIgnoreCase("admin")
+        List<Task> taskList = (List<Task>) (user.getLogin().equalsIgnoreCase("admin")
                 ? taskRepository.findAll(Sort.by("id").ascending())
                 : taskRepository.findTasksByUserIdOrderById(user.getId()));
+
+        return taskList.stream().map(taskConverter::entityToDto).toList();
     }
 
-    public Task getById(Long id) {
+    @Override
+    public TaskDto getById(Long id) {
         User user = userService.getCurrentUser();
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(format("Таски с id = %d не найдено", id)));
 
-        return (user.getLogin().equalsIgnoreCase("admin")
+        Task taskById = (user.getLogin().equalsIgnoreCase("admin")
                 ? task
                 : taskRepository.findTasksByIdAndUserId(id, user.getId())
                 .orElseThrow(() -> new ResourceForbiddenException(format("К таске с id = %d нет доступа у данного пользователя", id))));
+
+        return taskConverter.entityToDto(taskById);
     }
 
-    public Task putById(Long id, Task task) {
-        Task taskOld = getById(id);
-
-        task.setId(id);
-        task.setUser(taskOld.getUser());
-        task.setDone(taskOld.isDone());
+    @Override
+    public TaskDto putById(Long id, TaskDto taskDto) {
+        Task taskOld = taskConverter.dtoToEntity(getById(id));
+        Task task = Task.builder()
+                .id(id)
+                .date(taskDto.getDate())
+                .description(taskDto.getDescription())
+                .user(taskOld.getUser())
+                .done(taskOld.isDone())
+                .build();
 
         try {
-            return taskRepository.save(task);
+            taskRepository.save(task);
+            return taskConverter.entityToDto(task);
         } catch (Exception e) {
             throw new ResourceInternalServerErrorException(format("Не получилось изменить задачу с id = %d", id));
         }
     }
 
+    @Override
     public void deleteById(Long id) {
-        Task task = getById(id);
+        taskConverter.dtoToEntity(getById(id));
 
         try {
             taskRepository.deleteById(id);
@@ -82,25 +103,29 @@ public class TaskServiceImpl {
         }
     }
 
-    public Task patchById(Long id) {
-        Task task = getById(id);
+    @Override
+    public TaskDto patchById(Long id) {
+        Task task = taskConverter.dtoToEntity(getById(id));
 
         task.setDone(!task.isDone());
 
         try {
-            return taskRepository.save(task);
+            taskRepository.save(task);
+            return taskConverter.entityToDto(task);
         } catch (Exception e) {
             throw new ResourceInternalServerErrorException(format("Не получилось изменить задачу с id = %d", id));
         }
     }
 
-    public Task patchByIdMark(Long id) {
-        Task task = getById(id);
+    @Override
+    public TaskDto patchByIdMark(Long id) {
+        Task task = taskConverter.dtoToEntity(getById(id));
 
         task.setDone(true);
 
         try {
-            return taskRepository.save(task);
+            taskRepository.save(task);
+            return taskConverter.entityToDto(task);
         } catch (Exception e) {
             throw new ResourceInternalServerErrorException(format("Не получилось изменить задачу с id = %d", id));
         }

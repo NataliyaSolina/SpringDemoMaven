@@ -9,7 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.examples.springdemo.models.Task;
+import ru.examples.springdemo.dtos.TaskDto;
 import ru.examples.springdemo.services.TaskServiceImpl;
 
 import java.util.List;
@@ -46,8 +46,8 @@ public class TaskController {
     @PostMapping("/tasks")
     @Operation(summary = "Создание задачи",
             description = "Позволяет создать задачу пользователю")
-    public Task createTask(@RequestBody Task task) {
-        return taskService.create(task);
+    public TaskDto createTask(@RequestBody TaskDto taskDto) {
+        return taskService.createTask(taskDto);
     }
 
     @ApiResponses({
@@ -56,7 +56,7 @@ public class TaskController {
     @GetMapping("/tasks")
     @Operation(summary = "Вывод всех задач",
             description = "Позволяет вывести всего списка задач")
-    public List<Task> getAllTasks() {
+    public List<TaskDto> getAllTasks() {
         return taskService.getAllByUser();
     }
 
@@ -69,7 +69,7 @@ public class TaskController {
     @GetMapping("/tasks/{id}")
     @Operation(summary = "Вывод задачи по id",
             description = "Позволяет вывести задачу по заданному id")
-    public Task getTaskById(
+    public TaskDto getTaskById(
             @Parameter(description = "ID задачи, данные по которой запрашиваются",
                     required = true)
             @PathVariable Long id) {
@@ -79,8 +79,8 @@ public class TaskController {
     @PutMapping("/tasks/{id}")
     @Operation(summary = "Редактирование задачи по id",
             description = "Позволяет редактировать задачу с заданным id")
-    public Task putTaskById(@PathVariable Long id, @RequestBody Task task) {
-        return taskService.putById(id, task);
+    public TaskDto putTaskById(@PathVariable Long id, @RequestBody TaskDto taskDto) {
+        return taskService.putById(id, taskDto);
     }
 
     @ApiResponses({
@@ -99,14 +99,14 @@ public class TaskController {
     @PatchMapping("/tasks/{id}")
     @Operation(summary = "Редактирование отметки выполнения задачи по id",
             description = "Позволяет изменить отметку выполнения на противоположную у задачи с заданным id")
-    public Task patchTaskById(@PathVariable Long id) {
+    public TaskDto patchTaskById(@PathVariable Long id) {
         return taskService.patchById(id);
     }
 
     @PatchMapping("/tasks/{id}:mark-is-done")
     @Operation(summary = "Редактирование отметки выполнения задачи по id",
             description = "Позволяет изменить отметку выполнения на 'Выполнено' у задачи с заданным id")
-    public Task patchTaskByIdMark(@PathVariable Long id) {
+    public TaskDto patchTaskByIdMark(@PathVariable Long id) {
         return taskService.patchByIdMark(id);
     }
 }
