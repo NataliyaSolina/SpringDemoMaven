@@ -23,7 +23,6 @@ public class UserServiceImpl implements UserService {
     public UserDto createUser(UserDto userDto) {
         User user = userConverter.dtoToEntity(userDto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-
         userRepository.save(user);
 
         return userConverter.entityToDto(user);
@@ -31,13 +30,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getCurrentUser() {
-
         return authenticationSuccessHandler.getUser();
     }
 
     @Override
     public UserDto getCurrentUserDto() {
-
         return userConverter.entityToDto(getCurrentUser());
 
     }

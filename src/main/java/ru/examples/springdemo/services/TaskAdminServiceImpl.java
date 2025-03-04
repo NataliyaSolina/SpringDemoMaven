@@ -18,7 +18,7 @@ import static java.lang.String.format;
 
 @Service
 @RequiredArgsConstructor
-public class TaskServiceImpl implements TaskService {
+public class TaskAdminServiceImpl implements TaskService {
 
     private final TaskRepository taskRepository;
     private final UserServiceImpl userService;
@@ -26,9 +26,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TaskDto createTask(TaskDto taskDto) {
-        User user = userService.getCurrentUser();
+        User user = checkAccess();
         Task task = Task.builder()
-                .user(user)
+                .user((taskDto.getUserLogin() == null) ? user : userService.getUserByLogin(taskDto.getUserLogin()))
                 .date(taskDto.getDate())
                 .description(taskDto.getDescription())
                 .done(false)
@@ -44,22 +44,19 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<TaskDto> getAllByUser() {
-        User user = userService.getCurrentUser();
-        List<Task> taskList = (List<Task>) taskRepository.findTasksByUserIdOrderById(user.getId());
+        checkAccess();
+        List<Task> taskList = (List<Task>) taskRepository.findAll(Sort.by("id").ascending());
 
         return taskList.stream().map(taskConverter::entityToDto).toList();
     }
 
     @Override
     public TaskDto getById(Long id) {
-        User user = userService.getCurrentUser();
-        taskRepository.findById(id)
+        checkAccess();
+        Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(format("Таски с id = %d не найдено", id)));
 
-        Task taskById = taskRepository.findTasksByIdAndUserId(id, user.getId())
-                .orElseThrow(() -> new ResourceForbiddenException(format("К таске с id = %d нет доступа у данного пользователя", id)));
-
-        return taskConverter.entityToDto(taskById);
+        return taskConverter.entityToDto(task);
     }
 
     @Override
@@ -69,7 +66,7 @@ public class TaskServiceImpl implements TaskService {
                 .id(id)
                 .date(taskDto.getDate())
                 .description(taskDto.getDescription())
-                .user(taskOld.getUser())
+                .user((taskDto.getUserLogin() == null) ? taskOld.getUser() : userService.getUserByLogin(taskDto.getUserLogin()))
                 .done(taskOld.isDone())
                 .build();
 
@@ -118,5 +115,13 @@ public class TaskServiceImpl implements TaskService {
         } catch (Exception e) {
             throw new ResourceInternalServerErrorException(format("Не получилось изменить задачу с id = %d", id));
         }
+    }
+
+    private User checkAccess() {
+        User user = userService.getCurrentUser();
+        if (!user.getLogin().equalsIgnoreCase("admin")) {
+            throw new ResourceForbiddenException("К админке нет доступа у данного пользователя");
+        }
+        return user;
     }
 }
