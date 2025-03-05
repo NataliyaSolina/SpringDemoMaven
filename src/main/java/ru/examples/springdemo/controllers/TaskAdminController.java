@@ -103,10 +103,5 @@ public class TaskAdminController {
         return taskAdminService.patchById(id);
     }
 
-    @PatchMapping("/tasks/{id}:mark-is-done")
-    @Operation(summary = "Редактирование отметки выполнения задачи по id",
-            description = "Позволяет изменить отметку выполнения на 'Выполнено' у задачи с заданным id")
-    public TaskDto patchTaskByIdMark(@PathVariable Long id) {
-        return taskAdminService.patchByIdMark(id);
-    }
+
 }

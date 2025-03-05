@@ -105,16 +105,7 @@ public class TaskAdminServiceImpl implements TaskService {
 
     @Override
     public TaskDto patchByIdMark(Long id) {
-        Task task = taskConverter.dtoToEntity(getById(id));
-
-        task.setDone(true);
-
-        try {
-            taskRepository.save(task);
-            return taskConverter.entityToDto(task);
-        } catch (Exception e) {
-            throw new ResourceInternalServerErrorException(format("Не получилось изменить задачу с id = %d", id));
-        }
+        return null;
     }
 
     private User checkAccess() {
