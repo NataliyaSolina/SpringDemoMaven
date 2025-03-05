@@ -23,6 +23,7 @@ public class UserServiceImpl implements UserService {
     public UserDto createUser(UserDto userDto) {
         User user = userConverter.dtoToEntity(userDto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setIsAdmin(false);
         userRepository.save(user);
 
         return userConverter.entityToDto(user);

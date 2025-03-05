@@ -119,7 +119,7 @@ public class TaskAdminServiceImpl implements TaskService {
 
     private User checkAccess() {
         User user = userService.getCurrentUser();
-        if (!user.getLogin().equalsIgnoreCase("admin")) {
+        if (!user.getIsAdmin()) {
             throw new ResourceForbiddenException("К админке нет доступа у данного пользователя");
         }
         return user;

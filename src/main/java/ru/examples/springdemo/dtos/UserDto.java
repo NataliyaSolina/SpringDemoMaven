@@ -11,6 +11,9 @@ public class UserDto {
     @Schema(description = "Уникальный логин пользователя", example = "Nata", accessMode = Schema.AccessMode.READ_WRITE)
     private String login;
 
-    @Schema(description = "Уникальный пароль пользователя (храниться в зашифрованном виде)", example = "Spring3", accessMode = Schema.AccessMode.READ_WRITE)
+    @Schema(description = "Пароль пользователя (храниться в зашифрованном виде)", example = "Spring3", accessMode = Schema.AccessMode.READ_WRITE)
     private String password;
+
+    @Schema(description = "Является администратором", example = "Spring3", accessMode = Schema.AccessMode.READ_ONLY)
+    private Boolean isAdmin;
 }

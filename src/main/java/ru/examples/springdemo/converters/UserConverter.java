@@ -15,6 +15,7 @@ public class UserConverter {
         return UserDto.builder()
                 .login(user.getLogin())
                 .password("*****")
+                .isAdmin(user.getIsAdmin())
                 .build();
     }
 
@@ -23,6 +24,7 @@ public class UserConverter {
         return User.builder()
                 .login(userDto.getLogin())
                 .password(userDto.getPassword())
+                .isAdmin(userDto.getIsAdmin())
                 .build();
     }
 

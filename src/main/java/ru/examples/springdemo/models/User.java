@@ -22,5 +22,8 @@ public class User {
     private String login;
 
     private String password;
+
+    @Column(name = "is_admin")
+    private Boolean isAdmin;
 }
 
