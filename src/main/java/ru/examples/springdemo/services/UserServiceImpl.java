@@ -37,7 +37,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getCurrentUserDto() {
         return userConverter.entityToDto(getCurrentUser());
-
     }
 
     @Override

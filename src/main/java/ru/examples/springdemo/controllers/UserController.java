@@ -14,7 +14,7 @@ import ru.examples.springdemo.services.UserServiceImpl;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "Users", description = "Методы для работы с пользователями")
+@Tag(name = "1.Users", description = "Методы для работы с пользователями")
 public class UserController {
 
     private final UserServiceImpl userService;

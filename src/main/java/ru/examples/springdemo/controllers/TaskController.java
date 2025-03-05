@@ -31,7 +31,7 @@ import java.util.List;
                 content = @Content(examples = {@ExampleObject(
                         value = "{\n  \"statusCode\": 500,\n  \"status\": \"Internal Server Error\",\n  \"message\": \"Не получилось изменить задачу с id = 1\"\n}")}))
 })
-@Tag(name = "Tasks", description = "Методы для работы со списками задач")
+@Tag(name = "3.Tasks", description = "Методы для работы со списками задач")
 public class TaskController {
 
     private final TaskServiceImpl taskService;
