@@ -60,6 +60,16 @@ public class TaskController {
     }
 
     @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Список задач выведен")
+    })
+    @GetMapping("/tasks:done")
+    @Operation(summary = "Вывод списка сделанных или несделанных задач",
+            description = "Позволяет вывести список сделанных или несделанных задач")
+    public List<TaskDto> getTasksOnlyDoneOrNot(@RequestParam(name = "isDone", required = false) Boolean isDone) {
+        return taskService.getByUserAndDone(isDone);
+    }
+
+    @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Задача выведена"),
             @ApiResponse(responseCode = "500", description = "Задачу вывести не удалось",
                     content = @Content(examples = {@ExampleObject(

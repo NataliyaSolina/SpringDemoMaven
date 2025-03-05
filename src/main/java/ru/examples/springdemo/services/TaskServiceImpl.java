@@ -42,10 +42,18 @@ public class TaskServiceImpl implements TaskService {
         }
     }
 
+    // TODO: 05.03.2025 22:36 соеденить эти 2 метода
     @Override
     public List<TaskDto> getAllByUser() {
         User user = userService.getCurrentUser();
         List<Task> taskList = (List<Task>) taskRepository.findTasksByUserIdOrderById(user.getId());
+
+        return taskList.stream().map(taskConverter::entityToDto).toList();
+    }
+
+    public List<TaskDto> getByUserAndDone(Boolean isDone) {
+        User user = userService.getCurrentUser();
+        List<Task> taskList = (List<Task>) taskRepository.findTasksByUserIdAndDoneOrderById(user.getId(), isDone);
 
         return taskList.stream().map(taskConverter::entityToDto).toList();
     }

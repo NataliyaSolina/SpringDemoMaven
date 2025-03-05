@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.examples.springdemo.dtos.UserDto;
 import ru.examples.springdemo.services.UserServiceImpl;
 
+// TODO: 05.03.2025 21:37 может быть получиться смена пароля, но не придумала реализацию
 @Slf4j
 @RestController
 @RequiredArgsConstructor
