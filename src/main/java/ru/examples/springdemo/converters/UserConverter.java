@@ -1,16 +1,13 @@
 package ru.examples.springdemo.converters;
 
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 import ru.examples.springdemo.dtos.UserDto;
 import ru.examples.springdemo.models.User;
 
-import java.lang.reflect.Field;
-
 @Component
 public class UserConverter {
 
-    public UserDto entityToDto(User user){
+    public UserDto entityToDto(User user) {
 
         return UserDto.builder()
                 .login(user.getLogin())
@@ -19,7 +16,7 @@ public class UserConverter {
                 .build();
     }
 
-    public User dtoToEntity(UserDto userDto){
+    public User dtoToEntity(UserDto userDto) {
 
         return User.builder()
                 .login(userDto.getLogin())
