@@ -43,19 +43,23 @@ public class TaskAdminServiceImpl implements TaskAdminService{
     }
 
     @Override
-    public List<TaskDto> getTasks(Boolean isDone) {
+    public List<TaskDto> getTasks(Boolean isDone, String userLogin) {
         checkAccess();
-        return isDone == null ? getAllWithoutChoiceDone() : getAllWithChoiceDone(isDone);
-    }
-
-    private List<TaskDto> getAllWithoutChoiceDone() {
-        List<Task> taskList = (List<Task>) taskRepository.findAll(Sort.by("id").ascending());
-
-        return taskList.stream().map(taskConverter::entityToDto).toList();
-    }
-
-    private List<TaskDto> getAllWithChoiceDone(Boolean isDone) {
-        List<Task> taskList = (List<Task>) taskRepository.findTasksByDoneOrderById(isDone);
+        List<Task> taskList;
+        if (userLogin == null) {
+            if (isDone == null) {
+                taskList = (List<Task>) taskRepository.findAll(Sort.by("id").ascending());
+            } else {
+                taskList = (List<Task>) taskRepository.findTasksByDoneOrderById(isDone);
+            }
+        } else {
+            Long userId = userService.getUserByLogin(userLogin).getId();
+            if (isDone == null) {
+                taskList = (List<Task>) taskRepository.findTasksByUserIdOrderById(userId);
+            } else {
+                taskList = (List<Task>) taskRepository.findTasksByUserIdAndDoneOrderById(userId, isDone);
+            }
+        }
 
         return taskList.stream().map(taskConverter::entityToDto).toList();
     }

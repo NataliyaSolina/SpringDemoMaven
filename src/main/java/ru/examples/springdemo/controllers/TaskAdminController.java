@@ -57,8 +57,9 @@ public class TaskAdminController {
     @GetMapping("/tasks")
     @Operation(summary = "Вывод всех задач",
             description = "Позволяет вывести всего списка задач")
-    public List<TaskDto> getAllTasks(@RequestParam(name = "isDone", required = false) Boolean isDone) {
-        return taskAdminService.getTasks(isDone);
+    public List<TaskDto> getAllTasks(@RequestParam(name = "isDone", required = false) Boolean isDone,
+                                     @RequestParam(name = "userLogin", required = false) String userLogin) {
+        return taskAdminService.getTasks(isDone, userLogin);
     }
 
     @PutMapping("/tasks/{id}")

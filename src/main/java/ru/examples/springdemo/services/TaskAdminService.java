@@ -8,7 +8,7 @@ public interface TaskAdminService {
 
     TaskDto createTask(TaskDto taskDto);
 
-    List<TaskDto> getTasks(Boolean isDone);
+    List<TaskDto> getTasks(Boolean isDone, String userLogin);
 
     TaskDto putById(Long id, TaskDto taskDto);
 
