@@ -50,30 +50,15 @@ public class TaskAdminController {
         return taskAdminService.createTask(taskDto);
     }
 
+    // TODO: 06.03.2025 16:08 наверное фильтр и по юзеру тут нужен
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Список задач выведен")
     })
     @GetMapping("/tasks")
     @Operation(summary = "Вывод всех задач",
             description = "Позволяет вывести всего списка задач")
-    public List<TaskDto> getAllTasks() {
-        return taskAdminService.getAllByUser();
-    }
-
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Задача выведена"),
-            @ApiResponse(responseCode = "500", description = "Задачу вывести не удалось",
-                    content = @Content(examples = {@ExampleObject(
-                            value = "{\n  \"statusCode\": 500,\n  \"status\": \"Internal Server Error\",\n  \"message\": \"Не получилось вывести задачу\"\n}")}))
-    })
-    @GetMapping("/tasks/{id}")
-    @Operation(summary = "Вывод задачи по id",
-            description = "Позволяет вывести задачу по заданному id")
-    public TaskDto getTaskById(
-            @Parameter(description = "ID задачи, данные по которой запрашиваются",
-                    required = true)
-            @PathVariable Long id) {
-        return taskAdminService.getById(id);
+    public List<TaskDto> getAllTasks(@RequestParam(name = "isDone", required = false) Boolean isDone) {
+        return taskAdminService.getTasks(isDone);
     }
 
     @PutMapping("/tasks/{id}")

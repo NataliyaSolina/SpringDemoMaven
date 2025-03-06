@@ -55,18 +55,8 @@ public class TaskController {
     @GetMapping("/tasks")
     @Operation(summary = "Вывод всех задач",
             description = "Позволяет вывести всего списка задач")
-    public List<TaskDto> getAllTasks() {
-        return taskService.getAllByUser();
-    }
-
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Список задач выведен")
-    })
-    @GetMapping("/tasks:done")
-    @Operation(summary = "Вывод списка сделанных или несделанных задач",
-            description = "Позволяет вывести список сделанных или несделанных задач")
-    public List<TaskDto> getTasksOnlyDoneOrNot(@RequestParam(name = "isDone", required = false) Boolean isDone) {
-        return taskService.getByUserAndDone(isDone);
+    public List<TaskDto> getAllTasks(@RequestParam(name = "isDone", required = false) Boolean isDone) {
+        return taskService.getTasksByUser(isDone);
     }
 
     @ApiResponses({
