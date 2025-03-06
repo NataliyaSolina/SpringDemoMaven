@@ -4,19 +4,15 @@ import ru.examples.springdemo.dtos.TaskDto;
 
 import java.util.List;
 
-public interface TaskService {
+public interface TaskAdminService {
 
     TaskDto createTask(TaskDto taskDto);
 
-    List<TaskDto> getTasksByUser(Boolean isDone);
-
-    TaskDto getById(Long id);
+    List<TaskDto> getTasks(Boolean isDone);
 
     TaskDto putById(Long id, TaskDto taskDto);
 
     void deleteById(Long id);
 
     TaskDto patchById(Long id);
-
-    TaskDto patchByIdMark(Long id);
 }

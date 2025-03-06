@@ -18,7 +18,7 @@ import static java.lang.String.format;
 
 @Service
 @RequiredArgsConstructor
-public class TaskAdminServiceImpl implements TaskService {
+public class TaskAdminServiceImpl implements TaskAdminService{
 
     private final TaskRepository taskRepository;
     private final UserServiceImpl userService;
@@ -43,25 +43,27 @@ public class TaskAdminServiceImpl implements TaskService {
     }
 
     @Override
-    public List<TaskDto> getAllByUser() {
+    public List<TaskDto> getTasks(Boolean isDone) {
         checkAccess();
+        return isDone == null ? getAllWithoutChoiceDone() : getAllWithChoiceDone(isDone);
+    }
+
+    private List<TaskDto> getAllWithoutChoiceDone() {
         List<Task> taskList = (List<Task>) taskRepository.findAll(Sort.by("id").ascending());
 
         return taskList.stream().map(taskConverter::entityToDto).toList();
     }
 
-    @Override
-    public TaskDto getById(Long id) {
-        checkAccess();
-        Task task = taskRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(format("Таски с id = %d не найдено", id)));
+    private List<TaskDto> getAllWithChoiceDone(Boolean isDone) {
+        List<Task> taskList = (List<Task>) taskRepository.findTasksByDoneOrderById(isDone);
 
-        return taskConverter.entityToDto(task);
+        return taskList.stream().map(taskConverter::entityToDto).toList();
     }
 
     @Override
     public TaskDto putById(Long id, TaskDto taskDto) {
-        Task taskOld = taskConverter.dtoToEntity(getById(id));
+        checkAccess();
+        Task taskOld = getTaskById(id);
         Task task = Task.builder()
                 .id(id)
                 .date(taskDto.getDate())
@@ -80,7 +82,7 @@ public class TaskAdminServiceImpl implements TaskService {
 
     @Override
     public void deleteById(Long id) {
-        taskConverter.dtoToEntity(getById(id));
+        checkAccess();
 
         try {
             taskRepository.deleteById(id);
@@ -91,8 +93,8 @@ public class TaskAdminServiceImpl implements TaskService {
 
     @Override
     public TaskDto patchById(Long id) {
-        Task task = taskConverter.dtoToEntity(getById(id));
-
+        checkAccess();
+        Task task = getTaskById(id);
         task.setDone(!task.isDone());
 
         try {
@@ -103,16 +105,16 @@ public class TaskAdminServiceImpl implements TaskService {
         }
     }
 
-    @Override
-    public TaskDto patchByIdMark(Long id) {
-        return null;
-    }
-
     private User checkAccess() {
         User user = userService.getCurrentUser();
         if (!user.getIsAdmin()) {
             throw new ResourceForbiddenException("К админке нет доступа у данного пользователя");
         }
         return user;
+    }
+
+    private Task getTaskById(Long id) {
+        return taskRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(format("Таски с id = %d не найдено", id)));
     }
 }

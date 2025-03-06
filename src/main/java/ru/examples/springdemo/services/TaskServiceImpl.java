@@ -1,7 +1,6 @@
 package ru.examples.springdemo.services;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.examples.springdemo.converters.TaskConverter;
 import ru.examples.springdemo.dtos.TaskDto;
@@ -42,16 +41,19 @@ public class TaskServiceImpl implements TaskService {
         }
     }
 
-    // TODO: 05.03.2025 22:36 соеденить эти 2 метода
     @Override
-    public List<TaskDto> getAllByUser() {
+    public List<TaskDto> getTasksByUser(Boolean isDone) {
+        return isDone == null ? getAllByUserWithoutChoiceDone() : getAllByUserWithChoiceDone(isDone);
+    }
+
+    private List<TaskDto> getAllByUserWithoutChoiceDone() {
         User user = userService.getCurrentUser();
         List<Task> taskList = (List<Task>) taskRepository.findTasksByUserIdOrderById(user.getId());
 
         return taskList.stream().map(taskConverter::entityToDto).toList();
     }
 
-    public List<TaskDto> getByUserAndDone(Boolean isDone) {
+    private List<TaskDto> getAllByUserWithChoiceDone(Boolean isDone) {
         User user = userService.getCurrentUser();
         List<Task> taskList = (List<Task>) taskRepository.findTasksByUserIdAndDoneOrderById(user.getId(), isDone);
 
@@ -60,19 +62,14 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TaskDto getById(Long id) {
-        User user = userService.getCurrentUser();
-        taskRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(format("Таски с id = %d не найдено", id)));
+        Task task = getByIdAndUser(id);
 
-        Task taskById = taskRepository.findTasksByIdAndUserId(id, user.getId())
-                .orElseThrow(() -> new ResourceForbiddenException(format("К таске с id = %d нет доступа у данного пользователя", id)));
-
-        return taskConverter.entityToDto(taskById);
+        return taskConverter.entityToDto(task);
     }
 
     @Override
     public TaskDto putById(Long id, TaskDto taskDto) {
-        Task taskOld = taskConverter.dtoToEntity(getById(id));
+        Task taskOld = getByIdAndUser(id);
         Task task = Task.builder()
                 .id(id)
                 .date(taskDto.getDate())
@@ -91,7 +88,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public void deleteById(Long id) {
-        taskConverter.dtoToEntity(getById(id));
+        getByIdAndUser(id);
 
         try {
             taskRepository.deleteById(id);
@@ -102,8 +99,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TaskDto patchById(Long id) {
-        Task task = taskConverter.dtoToEntity(getById(id));
-
+        Task task = getByIdAndUser(id);
         task.setDone(!task.isDone());
 
         try {
@@ -116,8 +112,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TaskDto patchByIdMark(Long id) {
-        Task task = taskConverter.dtoToEntity(getById(id));
-
+        Task task = getByIdAndUser(id);
         task.setDone(true);
 
         try {
@@ -126,5 +121,14 @@ public class TaskServiceImpl implements TaskService {
         } catch (Exception e) {
             throw new ResourceInternalServerErrorException(format("Не получилось изменить задачу с id = %d", id));
         }
+    }
+
+    private Task getByIdAndUser(Long id) {
+        User user = userService.getCurrentUser();
+        taskRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(format("Таски с id = %d не найдено", id)));
+
+        return taskRepository.findTasksByIdAndUserId(id, user.getId())
+                .orElseThrow(() -> new ResourceForbiddenException(format("К таске с id = %d нет доступа у данного пользователя", id)));
     }
 }

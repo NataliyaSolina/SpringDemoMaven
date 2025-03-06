@@ -20,5 +20,7 @@ public interface TaskRepository extends PagingAndSortingRepository<Task, Long>, 
 
     Iterable<Task> findTasksByUserIdAndDoneOrderById(Long userId, Boolean isDone);
 
+    Iterable<Task> findTasksByDoneOrderById(Boolean isDone);
+
     Optional<Task> findTasksByIdAndUserId(Long taskId, Long userId);
 }
