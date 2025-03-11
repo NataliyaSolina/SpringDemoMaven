@@ -24,8 +24,6 @@ public class UserController {
     @Operation(summary = "Регистрация пользователя",
             description = "Позволяет создать пользователя")
     public UserDto create(@RequestBody UserDto userDto) {
-        log.debug("Post /user user {}", userDto);
-
         return userService.createUser(userDto);
     }
 
@@ -33,8 +31,6 @@ public class UserController {
     @Operation(summary = "Вывод текущего пользователя",
             description = "Позволяет получить текущего пользователя")
     public UserDto getCurrentUser() {
-        log.debug("Get /users/me");
-
         return userService.getCurrentUserDto();
     }
 }
