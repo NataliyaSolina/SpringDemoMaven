@@ -31,8 +31,13 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/users**", "/users/**", "/tasks**", "/tasks/**").authenticated()
+                        .requestMatchers("/ui/users**", "/ui/users/**", "/ui/tasks**", "/ui/tasks/**").authenticated()
+                        .requestMatchers("/admin/**").authenticated()
+                        .requestMatchers("/ui/admin/**").authenticated()
                         .requestMatchers("/login*").permitAll()
                         .requestMatchers(HttpMethod.POST, "/users").permitAll() // Регистрация
+                        .requestMatchers("/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -45,6 +50,7 @@ public class SecurityConfig {
                 )
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED));
+
         return http.build();
     }
 
@@ -65,4 +71,42 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
+
+//    @Bean
+//    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//
+//        http.csrf(AbstractHttpConfigurer::disable)
+//                .authorizeHttpRequests((authorize) -> authorize
+//                        .requestMatchers("/login*", "/main", "/").permitAll()
+//                        .anyRequest().authenticated())
+//                .cors(AbstractHttpConfigurer::disable)
+//                .formLogin(form -> form
+//                        .loginProcessingUrl("/login")
+//                        .usernameParameter("login")
+//                        .passwordParameter("password")
+//                        .successHandler(customAuthenticationSuccessHandler)
+//                        .failureHandler(customAuthenticationFailureHandler)
+//                        .permitAll()
+//                        .failureUrl("/login?error=true"))
+//                .logout(logout -> logout
+//                        .logoutSuccessUrl("/login"))
+//                .httpBasic(Customizer.withDefaults())
+//                       ;
+//
+//        return http.build();
+//    }
+//
+//    @Bean
+//    public WebSecurityCustomizer webSecurityCustomizer() {
+//        return (web) -> web.ignoring().requestMatchers(
+//                "/jakarta.faces.resource/**",
+//                "/",
+//                "/index.html",
+//                "/login",
+//                "/main",
+//                "/main.xhtml",
+//                "/img/**",
+//                "/error/**",
+//                "/RES_NOT_FOUND");
+//    }
 }
