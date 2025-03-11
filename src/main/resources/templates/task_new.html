@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<html lang="ru" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/style/style.css"/>
+    <title>Главная страница</title>
+</head>
+<body>
+<div class="container">
+    <h1>Создание Таски!</h1>
+    <br>
+
+    <form th:action="@{/ui/tasks/new}" th:object="${newTask}" method="post">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Дата</th>
+                <th scope="col">Описание</th>
+                <th scope="col">Пользователь</th>
+
+            </tr>
+            </thead>
+            <tbody class="table-tasks">
+            <tr>
+                <td><input type="text" class="Date" placeholder="2025-01-01" th:field="*{date}"></td>
+                <td><input type="text" class="Description" placeholder="Описание" th:field="*{description}"></td>
+                <td><input type="text" class="login" th:value="*{userLogin}" th:field="*{userLogin}" readonly>
+                </td>
+
+            </tr>
+            </tbody>
+        </table>
+        <button type="submit">Создать</button>
+    </form>
+    <button onclick="location.href='/ui/tasks'">Вернуться</button>
+</div>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+
+<html lang="ru" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/style/style.css"/>
+    <title>Главная страница</title>
+</head>
+<body>
+<div class="container">
+    <h1>Таски!</h1>
+    <br>
+    <div class="buttons_block" th:hidden="${hiddenTop}">
+        <button onclick="location.href='/ui/tasks'">Всё</button>
+        <button onclick="location.href='/ui/tasks?isDone=true'">Сделано</button>
+        <button onclick="location.href='/ui/tasks?isDone=false'">Не сделано</button>
+        <button onclick="location.href='/ui/tasks/new'">Создать новую таску</button>
+        <!--    <button class="btn btn-primary" onclick="location.href = '/headteacher/timetable/0/0';">Вернуться</button>-->
+        <!--   <a class="btn btn-danger" th:href="@{'/headteacher/removefromtimetable?id=' + ${tT.getId()}}"-->
+        <!--           role="button">Удалить</a>-->
+        <!--    <button>Не сделано</button>-->
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">id</th>
+            <th scope="col">Дата</th>
+            <th scope="col">Описание</th>
+            <th scope="col">Пользователь</th>
+            <th scope="col">Статус</th>
+        </tr>
+        </thead>
+        <tbody class="table-tasks">
+        <tr th:each="myTasks:${listTasks}">
+            <td><a th:href="@{'/ui/tasks/' + ${myTasks.getId()}}" th:text="${myTasks.getId()}"></a></td>
+            <td th:text="${myTasks.getDate()}"></td>
+            <td th:text="${myTasks.getDescription()}"></td>
+            <td th:text="${myTasks.getUserLogin()}"></td>
+            <td th:text="(${myTasks.isDone()}) ? 'Сделано' : 'Не сделано'"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="buttons_block single" th:hidden="${hiddenSingle}">
+
+        <button onclick="location.href='/ui/tasks'">Проставить Сделано</button>
+        <button onclick="location.href='/ui/tasks?isDone=true'">Сменить статус</button>
+        <button onclick="location.href='/ui/tasks?isDone=false'">Исправить таску</button>
+        <!--        <form th:action="@{${str}}" th:object="${id}" th:method="delete">-->
+
+        <!--        <button type="submit">Удалить таску</button>-->
+        <!--        </form>-->
+        <!--        <a th:href="${str}" class="button">Удалить таску</a>-->
+        <!--    <button class="btn btn-primary" onclick="location.href = '/headteacher/timetable/0/0';">Вернуться</button>-->
+        <!--   <a class="btn btn-danger" th:href="@{'/headteacher/removefromtimetable?id=' + ${tT.getId()}}"-->
+        <!--           role="button">Удалить</a>-->
+        <!--    <button>Не сделано</button>-->
+        <button type="button" th:onclick="sendDelete()">Delete</button>
+        </form>
+
+        <p id="flag" th:text="${flag}"></p>
+
+
+        <script th:inline="javascript">
+            function sendDelete() {
+                let url = window.location.pathname;
+                // console.log(url);
+                var xhttp = new XMLHttpRequest();
+                // console.log(xhttp.status);
+                xhttp.open("DELETE", url, false);
+                // console.log(xhttp.status);
+                xhttp.onload = function () {
+                    window.location.refresh();
+                    let fl = document.getElementById('flag').valueOf();
+                    console.log(fl);
+                    if (xhttp.status === 200) {
+                        url = window.location.pathname;
+                        console.log(url);
+                        console.log(xhttp.status);
+
+
+                        alert("С удалением всё ок")
+                    } else {
+                        window.location.replace('/ui/error');
+                        // alert("Что-то пошло не так - ничего не удалилось")
+                    }
+                    // console.log(xhttp.status);
+                    let responseURL = xhttp.responseURL;
+                    // console.log(xhttp.status);
+                    // console.log("Redirecting to:", responseURL);
+                    // window.location.replace('/ui/tasks');
+                    // console.log(xhttp.status);
+                };
+                // console.log(xhttp.status);
+                xhttp.send();
+                // console.log(xhttp.status);
+            }
+        </script>
+    </div>
+</div>
+</body>
+</html>
