@@ -29,7 +29,7 @@ h1 {
 
 table {
     width: 80%;
-    margin: 80px 0px;
+    margin: 40px 0px;
     border: 1px solid #a9d6f8;
     border-spacing: 0px;
 }
@@ -52,6 +52,26 @@ table tr:nth-child(even) {
     background-color: #d0e9fa;
 }
 
-#flag {
-    background-color: blue;
+button {
+    background-color: #a9d6f8;
+    padding: 10px;
+    width: 180px;
+}
+
+.buttons_block {
+    margin-bottom: 40px;
+}
+
+.buttons_block form {
+    display: inline;
+}
+
+.buttons_block.back {
+    margin-left: 183px;
+    margin-top: -79px;
+}
+
+p.message {
+    font-weight: bold;
+    font-size: 18px;
 }

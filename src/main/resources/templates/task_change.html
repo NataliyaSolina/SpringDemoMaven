@@ -6,17 +6,18 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/style/style.css"/>
-    <title>Главная страница</title>
+    <title>Изменение страница</title>
 </head>
 <body>
 <div class="container">
-    <h1>Создание Таски!</h1>
+    <h1>Изменение Таски!</h1>
     <br>
 
-    <form th:action="@{/ui/tasks/new}" th:object="${newTask}" method="post">
+    <form th:attr="action=@{'/ui/tasks/' + ${changeTask.id} + ':put'}" th:object="${changeTask}" method="post">
         <table class="table">
             <thead>
             <tr>
+                <th scope="col">Id</th>
                 <th scope="col">Дата</th>
                 <th scope="col">Описание</th>
                 <th scope="col">Пользователь</th>
@@ -25,8 +26,9 @@
             </thead>
             <tbody class="table-tasks">
             <tr>
-                <td><input type="text" class="Date" placeholder="2025-01-01" th:field="*{date}"></td>
-                <td><input type="text" class="Description" placeholder="Описание" th:field="*{description}"></td>
+                <td><input type="text" class="Id" th:value="*{id}" th:field="*{id}" readonly></td>
+                <td><input type="text" class="Date" th:value="*{date}" th:field="*{date}"></td>
+                <td><input type="text" class="Description" th:value="*{description}" th:field="*{description}"></td>
                 <td><input type="text" class="login" th:value="*{userLogin}" th:field="*{userLogin}" readonly>
                 </td>
 
@@ -34,7 +36,7 @@
             </tbody>
         </table>
         <div class="buttons_block">
-            <button type="submit">Создать</button>
+            <button type="submit">Изменить</button>
         </div>
     </form>
     <div class="buttons_block back">

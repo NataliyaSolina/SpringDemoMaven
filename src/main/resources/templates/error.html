@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 
-<html lang="ru" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<html lang="ru" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Главная страница</title>
+    <link rel="stylesheet" href="/style/style.css"/>
+    <title>Error</title>
 </head>
 <body>
-<div layout:fragment="content">
-    <h1>404</h1>
-    <p th:text="${flag}"></p>
-    <img src="img/logotype.jpg">
+<div class="container">
+    <h1>Error</h1>
+    <p class="message" th:text="${error}"></p>
+
+    <button onclick="location.href='/ui/tasks'">Обратно ко всем таскам</button>
 </div>
 </body>
 </html>

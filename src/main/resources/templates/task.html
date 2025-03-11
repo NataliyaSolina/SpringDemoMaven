@@ -17,11 +17,10 @@
         <button onclick="location.href='/ui/tasks?isDone=true'">Сделано</button>
         <button onclick="location.href='/ui/tasks?isDone=false'">Не сделано</button>
         <button onclick="location.href='/ui/tasks/new'">Создать новую таску</button>
-        <!--    <button class="btn btn-primary" onclick="location.href = '/headteacher/timetable/0/0';">Вернуться</button>-->
-        <!--   <a class="btn btn-danger" th:href="@{'/headteacher/removefromtimetable?id=' + ${tT.getId()}}"-->
-        <!--           role="button">Удалить</a>-->
-        <!--    <button>Не сделано</button>-->
     </div>
+
+    <p class="message" th:text="${str}"></p>
+
     <table class="table">
         <thead>
         <tr>
@@ -45,60 +44,20 @@
 
     <div class="buttons_block single" th:hidden="${hiddenSingle}">
 
-        <button onclick="location.href='/ui/tasks'">Проставить Сделано</button>
+        <!--        <button onclick="location.href='/ui/tasks'">Проставить Сделано</button>-->
+        <form action="#" th:attr="action=@{'/ui/tasks/' + ${id} + ':patch'}" th:object="${id}" method="post">
         <button onclick="location.href='/ui/tasks?isDone=true'">Сменить статус</button>
-        <button onclick="location.href='/ui/tasks?isDone=false'">Исправить таску</button>
-        <!--        <form th:action="@{${str}}" th:object="${id}" th:method="delete">-->
-
-        <!--        <button type="submit">Удалить таску</button>-->
-        <!--        </form>-->
-        <!--        <a th:href="${str}" class="button">Удалить таску</a>-->
-        <!--    <button class="btn btn-primary" onclick="location.href = '/headteacher/timetable/0/0';">Вернуться</button>-->
-        <!--   <a class="btn btn-danger" th:href="@{'/headteacher/removefromtimetable?id=' + ${tT.getId()}}"-->
-        <!--           role="button">Удалить</a>-->
-        <!--    <button>Не сделано</button>-->
-        <button type="button" th:onclick="sendDelete()">Delete</button>
+        </form>
+        <form action="#" th:attr="action=@{'/ui/tasks/' + ${id} + ':put'}" th:object="${id}" method="get">
+            <!--            <input type="text" hidden="true" th:if="${id != null}" th:value="${listTasks.id}" th:field="${listTasks.id}">-->
+            <button type="submit">Исправить таску</button>
         </form>
 
-        <p id="flag" th:text="${flag}"></p>
-
-
-        <script th:inline="javascript">
-            function sendDelete() {
-                let url = window.location.pathname;
-                // console.log(url);
-                var xhttp = new XMLHttpRequest();
-                // console.log(xhttp.status);
-                xhttp.open("DELETE", url, false);
-                // console.log(xhttp.status);
-                xhttp.onload = function () {
-                    window.location.refresh();
-                    let fl = document.getElementById('flag').valueOf();
-                    console.log(fl);
-                    if (xhttp.status === 200) {
-                        url = window.location.pathname;
-                        console.log(url);
-                        console.log(xhttp.status);
-
-
-                        alert("С удалением всё ок")
-                    } else {
-                        window.location.replace('/ui/error');
-                        // alert("Что-то пошло не так - ничего не удалилось")
-                    }
-                    // console.log(xhttp.status);
-                    let responseURL = xhttp.responseURL;
-                    // console.log(xhttp.status);
-                    // console.log("Redirecting to:", responseURL);
-                    // window.location.replace('/ui/tasks');
-                    // console.log(xhttp.status);
-                };
-                // console.log(xhttp.status);
-                xhttp.send();
-                // console.log(xhttp.status);
-            }
-        </script>
+        <form action="#" th:attr="action=@{'/ui/tasks/' + ${id} + ':delete'}" th:object="${id}" method="post">
+            <button type="submit">Удалить таску</button>
+        </form>
     </div>
+
 </div>
 </body>
 </html>
