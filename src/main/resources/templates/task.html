@@ -44,12 +44,10 @@
 
     <div class="buttons_block single" th:hidden="${hiddenSingle}">
 
-        <!--        <button onclick="location.href='/ui/tasks'">Проставить Сделано</button>-->
         <form action="#" th:attr="action=@{'/ui/tasks/' + ${id} + ':patch'}" th:object="${id}" method="post">
-        <button onclick="location.href='/ui/tasks?isDone=true'">Сменить статус</button>
+            <button onclick="location.href='/ui/tasks?isDone=true'">Сменить статус</button>
         </form>
         <form action="#" th:attr="action=@{'/ui/tasks/' + ${id} + ':put'}" th:object="${id}" method="get">
-            <!--            <input type="text" hidden="true" th:if="${id != null}" th:value="${listTasks.id}" th:field="${listTasks.id}">-->
             <button type="submit">Исправить таску</button>
         </form>
 
